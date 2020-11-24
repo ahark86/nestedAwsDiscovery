@@ -1,4 +1,4 @@
-import boto3, requests, urllib3
+import boto3, requests, urllib3, sys
 from datetime import datetime
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -6,17 +6,17 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 role = 'OrganizationAccountAccessRole'
 creds = []
 morphurl = 'https://68.39.65.192'
-apitoken = <%= cypher.read('secret/apitoken') %>
+apitoken = sys.argv[1]
 
 #Instantiate 'organization' object
 org_client = boto3.client('organizations',
-	aws_access_key_id=<%= cypher.read('secret/awsKeyId') %>,
-    aws_secret_access_key=<%= cypher.read('secret/awsKeySecret') %>)
+	aws_access_key_id=sys.argv[2],
+    aws_secret_access_key=sys.argv[3])
 
 #instantiate 'sts' object
 sts_client = boto3.client('sts',
-	aws_access_key_id=<%= cypher.read('secret/awsKeyId') %>,
-    aws_secret_access_key=<%= cypher.read('secret/awsKeySecret') %>)
+	aws_access_key_id=sys.argv[2],
+    aws_secret_access_key=sys.argv[3])
 
 #Call list_accounts() method on organization object
 org_response = org_client.list_accounts()
