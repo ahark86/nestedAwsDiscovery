@@ -55,7 +55,7 @@ for i in range(0, int(len(org_response['Accounts']))):
 
 			requests.post(f'{morphurl}/api/zones', 
 				data={"zone": {"name": name, "description": "None", "groupId": 1, "zoneType": {"code": "amazon"},
-					"config": {"certificateProvider": "internal", "endpoint": "ec2.us-east-1.amazonaws.com", "accessKey": f'{sys.argv[2]}', "secretKey": f'{sys.argv[3]}', "vpc": "None", "importExisting": "off"},
+					"config": {"certificateProvider": "internal", "endpoint": "ec2.us-east-1.amazonaws.com", "accessKey": sys.argv[2], "secretKey": sys.argv[3], "vpc": "None", "importExisting": "off"},
 					"code": "None",
 					"location": "None",
 					"visibility": "private"}
