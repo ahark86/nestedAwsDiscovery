@@ -6,17 +6,17 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 role = 'OrganizationAccountAccessRole'
 creds = []
 morphurl = 'https://68.39.65.192'
-apitoken = '4ed299f0-5a73-4906-9ed1-758931b678b1' #sys.argv[1]
+apitoken = sys.argv[1]
 
 #Instantiate 'organization' object
 org_client = boto3.client('organizations',
-	aws_access_key_id='AKIAQHCX3NJFB2OG5YX6', #sys.argv[2],
-    aws_secret_access_key='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') #sys.argv[3])
+	aws_access_key_id=sys.argv[2],
+    aws_secret_access_key=sys.argv[3])
 
 #instantiate 'sts' object
 sts_client = boto3.client('sts',
-	aws_access_key_id='AKIAQHCX3NJFB2OG5YX6', #sys.argv[2],
-    aws_secret_access_key='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') #sys.argv[3])
+	aws_access_key_id=sys.argv[2],
+    aws_secret_access_key=sys.argv[3])
 
 #Call list_accounts() method on organization object
 org_response = org_client.list_accounts()
@@ -63,8 +63,9 @@ for i in range(0, int(len(org_response['Accounts']))):
 				"config": {
 					"certificateProvider": "internal", 
 					"endpoint": "ec2.us-east-1.amazonaws.com", 
-					"accessKey": 'AKIAQHCX3NJFB2OG5YX6', 
-					"secretKey": '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', 
+					"accessKey": sys.argv[2], 
+					"secretKey": sys.argv[3],
+					"stsAssumeRole": "foobar", 
 					"vpc": "All", 
 					"importExisting": "off"
 				},
