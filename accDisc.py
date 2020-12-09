@@ -28,7 +28,7 @@ for i in range(0, int(len(org_response['Accounts']))):
 	#Instantiate account name
 	name = org_response['Accounts'][i]['Name']
 	
-	if True:#(added.date() - datetime.today().date()).days == 0: #If the account was added to the organization on the prior date (yesterday)
+	if (added.date() - datetime.today().date()).days == -1: #If the account was added to the organization on the prior date (yesterday)
 		#Instantiate the ID for the AWS account currently being iterated on
 		current = org_response['Accounts'][i]['Id']
 	else:
@@ -47,34 +47,34 @@ for i in range(0, int(len(org_response['Accounts']))):
 		#sts_response['Credentials']['SessionToken'], 
 		sts_response['AssumedRoleUser']['Arn']))
 
-	#Iterate through each tuple in creds
-	for c in creds:
-		#Attempt to integrate a new cloud with Morpheus using the temporary creds from assumerole using Morpheus API
-		requestHeaders = {'Content-type': 'application/json', 
-			'Authorization': f'Bearer {apitoken}'}
+#Iterate through each tuple in creds
+for cred in creds:
+	#Attempt to integrate a new cloud with Morpheus using the temporary creds from assumerole using Morpheus API
+	requestHeaders = {'Content-type': 'application/json', 
+		'Authorization': f'Bearer {apitoken}'}
 
-		requests.post(f'{morphurl}/api/zones', 
-			json={
-				"zone": {
-					"name": c[0], 
-					"description": None, 
-					"groupId": 1, 
-					"zoneType": {
-						"code": "amazon"
-					},
-					"config": {
-						"certificateProvider": "internal", 
-						"endpoint": "ec2.us-east-1.amazonaws.com", 
-						"accessKey": sys.argv[2], 
-						"secretKey": sys.argv[3],
-						"stsAssumeRole": c[1], 
-						"vpc": "All", 
-						"importExisting": "off"
-					},
-					"code": None,
-					"location": None,
-					"visibility": "private"
-					}
+	requests.post(f'{morphurl}/api/zones', 
+		json={
+			"zone": {
+				"name": cred[0], 
+				"description": None, 
+				"groupId": 1, 
+				"zoneType": {
+					"code": "amazon"
 				},
-			headers=requestHeaders, 
-			verify=False)
+				"config": {
+					"certificateProvider": "internal", 
+					"endpoint": "ec2.us-east-1.amazonaws.com", 
+					"accessKey": sys.argv[2], 
+					"secretKey": sys.argv[3],
+					"stsAssumeRole": cred[1], 
+					"vpc": "All", 
+					"importExisting": "off"
+				},
+				"code": None,
+				"location": None,
+				"visibility": "private"
+				}
+			},
+		headers=requestHeaders, 
+		verify=False)
