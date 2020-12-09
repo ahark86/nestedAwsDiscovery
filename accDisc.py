@@ -5,7 +5,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 role = 'OrganizationAccountAccessRole'
 creds = []
-morphurl = 'https://68.39.65.192'
+morphurl = sys.argv[4]
 apitoken = sys.argv[1]
 
 #Instantiate 'organization' object
@@ -28,7 +28,7 @@ for i in range(0, int(len(org_response['Accounts']))):
 	#Instantiate account name
 	name = org_response['Accounts'][i]['Name']
 	
-	if True:#(added.date() - datetime.today().date()).days == 0: #If the account was added to the organization on the prior date (yesterday)
+	if (added.date() - datetime.today().date()).days == 0: #If the account was added to the organization on the prior date (yesterday)
 		#Instantiate the ID for the AWS account currently being iterated on
 		current = org_response['Accounts'][i]['Id']
 	else:
@@ -54,7 +54,7 @@ for i in range(0, int(len(org_response['Accounts']))):
 	requests.post(f'{morphurl}/api/zones', 
 		json={
 			"zone": {
-				"name": name, 
+				"name": creds[i][0], 
 				"description": None, 
 				"groupId": 1, 
 				"zoneType": {
@@ -65,7 +65,7 @@ for i in range(0, int(len(org_response['Accounts']))):
 					"endpoint": "ec2.us-east-1.amazonaws.com", 
 					"accessKey": sys.argv[2], 
 					"secretKey": sys.argv[3],
-					"stsAssumeRole": "foobar", 
+					"stsAssumeRole": creds[i][1], 
 					"vpc": "All", 
 					"importExisting": "off"
 				},
