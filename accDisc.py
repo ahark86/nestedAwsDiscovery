@@ -56,7 +56,7 @@ for i in range(0, int(len(org_response['Accounts']))):
 		requests.post(f'{morphurl}/api/zones', 
 			json={
 				"zone": {
-					"name": creds[c][0], 
+					"name": c[0], 
 					"description": None, 
 					"groupId": 1, 
 					"zoneType": {
@@ -67,7 +67,7 @@ for i in range(0, int(len(org_response['Accounts']))):
 						"endpoint": "ec2.us-east-1.amazonaws.com", 
 						"accessKey": sys.argv[2], 
 						"secretKey": sys.argv[3],
-						"stsAssumeRole": creds[c][1], 
+						"stsAssumeRole": c[1], 
 						"vpc": "All", 
 						"importExisting": "off"
 					},
