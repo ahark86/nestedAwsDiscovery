@@ -28,7 +28,7 @@ for i in range(0, int(len(org_response['Accounts']))):
 	#Instantiate account name
 	name = org_response['Accounts'][i]['Name']
 	
-	if (added.date() - datetime.today().date()).days == 0: #If the account was added to the organization on the prior date (yesterday)
+	if True:#(added.date() - datetime.today().date()).days == 0: #If the account was added to the organization on the prior date (yesterday)
 		#Instantiate the ID for the AWS account currently being iterated on
 		current = org_response['Accounts'][i]['Id']
 	else:
