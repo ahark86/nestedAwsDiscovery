@@ -47,32 +47,34 @@ for i in range(0, int(len(org_response['Accounts']))):
 		#sts_response['Credentials']['SessionToken'], 
 		sts_response['AssumedRoleUser']['Arn']))
 
-	#Attempt to integrate a new cloud with Morpheus using the temporary creds from assumerole using Morpheus API
-	requestHeaders = {'Content-type': 'application/json', 
-		'Authorization': f'Bearer {apitoken}'}
+	#Iterate through each tuple in creds
+	for c in creds:
+		#Attempt to integrate a new cloud with Morpheus using the temporary creds from assumerole using Morpheus API
+		requestHeaders = {'Content-type': 'application/json', 
+			'Authorization': f'Bearer {apitoken}'}
 
-	requests.post(f'{morphurl}/api/zones', 
-		json={
-			"zone": {
-				"name": creds[i][0], 
-				"description": None, 
-				"groupId": 1, 
-				"zoneType": {
-					"code": "amazon"
+		requests.post(f'{morphurl}/api/zones', 
+			json={
+				"zone": {
+					"name": creds[c][0], 
+					"description": None, 
+					"groupId": 1, 
+					"zoneType": {
+						"code": "amazon"
+					},
+					"config": {
+						"certificateProvider": "internal", 
+						"endpoint": "ec2.us-east-1.amazonaws.com", 
+						"accessKey": sys.argv[2], 
+						"secretKey": sys.argv[3],
+						"stsAssumeRole": creds[c][1], 
+						"vpc": "All", 
+						"importExisting": "off"
+					},
+					"code": None,
+					"location": None,
+					"visibility": "private"
+					}
 				},
-				"config": {
-					"certificateProvider": "internal", 
-					"endpoint": "ec2.us-east-1.amazonaws.com", 
-					"accessKey": sys.argv[2], 
-					"secretKey": sys.argv[3],
-					"stsAssumeRole": creds[i][1], 
-					"vpc": "All", 
-					"importExisting": "off"
-				},
-				"code": None,
-				"location": None,
-				"visibility": "private"
-				}
-			},
-		headers=requestHeaders, 
-		verify=False)
+			headers=requestHeaders, 
+			verify=False)
