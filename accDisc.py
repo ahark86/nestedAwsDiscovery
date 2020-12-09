@@ -43,8 +43,8 @@ for i in range(0, int(len(org_response['Accounts']))):
 
 		#Append the temporary creds/role arn as a tuple to a list called 'creds'
 		creds.append((name, 
-			sts_response['Credentials']['AccessKeyId'],  
-			sts_response['Credentials']['SecretAccessKey'], 
+			#sts_response['Credentials']['AccessKeyId'],  
+			#sts_response['Credentials']['SecretAccessKey'], 
 			#sts_response['Credentials']['SessionToken'], 
 			sts_response['AssumedRoleUser']['Arn']))
 
@@ -55,7 +55,7 @@ for i in range(0, int(len(org_response['Accounts']))):
 
 			requests.post(f'{morphurl}/api/zones', 
 				data={"zone": {"name": name, "description": "None", "groupId": 1, "zoneType": {"code": "amazon"},
-					"config": {"certificateProvider": "internal", "endpoint": "ec2.us-east-1.amazonaws.com", "accessKey": f'{creds[i][0]}', "secretKey": f'{creds[i][1]}', "vpc": "None", "importExisting": "off"},
+					"config": {"certificateProvider": "internal", "endpoint": "ec2.us-east-1.amazonaws.com", "accessKey": f'{sys.argv[2]}', "secretKey": f'{sys.argv[3]}', "vpc": "None", "importExisting": "off"},
 					"code": "None",
 					"location": "None",
 					"visibility": "private"}
